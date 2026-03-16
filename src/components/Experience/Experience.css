@@ -1,0 +1,182 @@
+.experience-section {
+  padding: 100px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Fade-in helpers (reutilizados aquí localmente) */
+.fade-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.is-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ── Timeline ── */
+.timeline {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Línea vertical */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+
+/* Ítem del timeline */
+.timeline-item {
+  position: relative;
+  display: flex;
+  margin-bottom: 48px;
+}
+
+/* Lado izquierdo: card a la izquierda, punto en el centro */
+.timeline-item--left {
+  justify-content: flex-end;
+  padding-right: calc(50% + 32px);
+}
+
+/* Lado derecho: card a la derecha */
+.timeline-item--right {
+  justify-content: flex-start;
+  padding-left: calc(50% + 32px);
+}
+
+/* Punto en la línea */
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--bg-primary);
+  z-index: 1;
+}
+
+.timeline-dot-pulse {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Tarjeta */
+.timeline-card {
+  width: 100%;
+  padding: 24px 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.timeline-card:hover {
+  border-color: rgba(0, 180, 216, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.timeline-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.timeline-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.timeline-badge-current {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 180, 216, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(0, 180, 216, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.timeline-company {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.timeline-period {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.timeline-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ── Tablet: 1080px – 546px ── */
+@media (max-width: 1080px) {
+  .experience-section {
+    padding: 80px 32px;
+  }
+  .timeline {
+    max-width: 640px;
+  }
+}
+
+/* ── Mobile: 667px – 320px ── */
+@media (max-width: 667px) {
+  .experience-section {
+    padding: 64px 20px;
+  }
+  .timeline-line {
+    left: 14px;
+  }
+  .timeline-item--left,
+  .timeline-item--right {
+    padding-left: 44px;
+    padding-right: 0;
+    justify-content: flex-start;
+  }
+  .timeline-dot {
+    left: 14px;
+  }
+  .timeline-card {
+    padding: 18px 16px;
+  }
+  .timeline-card-title {
+    font-size: 14px;
+  }
+  .timeline-item {
+    margin-bottom: 32px;
+  }
+}

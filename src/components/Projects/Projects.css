@@ -1,0 +1,247 @@
+.projects-section {
+  padding: 30px 0 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.projects-section > .section-title {
+  padding: 0 24px;
+}
+
+/* Cada card ocupa una pantalla y es sticky */
+.project-sticky {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+}
+
+.project-card {
+  position: relative;
+  width: 78%;
+  max-width: 960px;
+  height: 480px;
+  border-radius: 20px;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  transform-origin: top center;
+  overflow: hidden;
+}
+
+.project-card-header {
+  margin-bottom: 10px;
+}
+
+.project-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.project-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Cuerpo: info + imagen */
+.project-card-body {
+  display: flex;
+  gap: 32px;
+  flex: 1;
+  min-height: 0;
+}
+
+.project-info {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.project-description,
+.project-built,
+.project-result {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.project-result {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.project-tech {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.project-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: underline;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.project-links a:hover {
+  opacity: 0.6;
+}
+
+/* Imagen */
+.project-image-wrapper {
+  flex: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-image-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.project-image-inner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Imagen clickeable */
+.project-image-clickable {
+  cursor: zoom-in;
+  position: relative;
+}
+
+.project-image-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.project-image-clickable:hover .project-image-hint {
+  opacity: 1;
+}
+
+/* En táctil (sin hover real) el ícono siempre visible */
+@media (hover: none) {
+  .project-image-hint {
+    opacity: 1;
+  }
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+
+/* ── Tablet: 1080px – 546px ── */
+@media (max-width: 1080px) {
+  .project-card {
+    width: 88%;
+    height: auto;
+    min-height: 440px;
+    padding: 28px 32px;
+  }
+  .project-title {
+    font-size: 20px;
+  }
+}
+
+/* ── 859px – 320px: layout columna manteniendo efecto stacking ── */
+@media (max-width: 859px) {
+  .project-card {
+    width: 94%;
+    height: auto;
+    min-height: unset;
+    padding: 24px 20px;
+  }
+  .project-card-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .project-info {
+    width: 100%;
+  }
+  .project-image-wrapper {
+    height: 280px;
+    flex: none;
+  }
+  .project-title {
+    font-size: 18px;
+  }
+  .project-description,
+  .project-built,
+  .project-result {
+    font-size: 12px;
+  }
+}
+
+/* ── Mobile: 545px – 320px ── */
+@media (max-width: 545px) {
+  .projects-section {
+    padding-top: 64px;
+  }
+  .project-image-wrapper {
+    height: 220px;
+  }
+}

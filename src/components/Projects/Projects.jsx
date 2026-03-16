@@ -1,0 +1,252 @@
+import { useRef, useState, useEffect, useCallback } from "react";
+import { useTransform, motion, useScroll, AnimatePresence } from "framer-motion";
+import "./Projects.css";
+
+function ImageLightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="lightbox-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
+      <motion.img
+        className="lightbox-img"
+        src={src}
+        alt={alt}
+        initial={{ scale: 0.88, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.88, opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </motion.div>
+  );
+}
+
+const projects = [
+  {
+    title: "Constructora Hidrorural",
+    badge: "🏗️ Cliente Real en Producción",
+    description:
+      "Hidrorural dependía casi exclusivamente de licitaciones con el MOP. Sin web ni canal de contacto formal, las solicitudes llegaban por teléfono de forma informal.",
+    built:
+      "Por eso, implementé una SPA institucional con React 19 y Vite, 6 páginas y diseño 100% responsivo. Backend propio en Node.js/Express con formulario de cotización, Nodemailer, rate-limiting y honeypot anti-spam.",
+    result:
+      "Con ello, la empresa pasó de cero presencia digital a tener un canal formal de captación de clientes. Primer proyecto en producción con cliente real.",
+    stack: [
+      "React 19",
+      "Vite",
+      "Node.js",
+      "Express",
+      "Nodemailer",
+      "Open-Meteo API",
+    ],
+    image: `${import.meta.env.BASE_URL}assets/Hidrorural_Captura2.png`,
+    color: "#1a1a2e",
+    demoUrl: "https://javiermll.github.io/contructora-hidrorural-frontend/",
+    frontendUrl: "https://github.com/Javiermll/contructora-hidrorural-frontend",
+    backendUrl: "https://github.com/Javiermll/contructora-hidrorural-backend",
+  },
+  {
+    title: "Around The U.S. Full-Stack",
+    badge: "🔐 Proyecto Final Bootcamp",
+    description:
+      "Construir una aplicación full-stack completa con registro y login seguros, sesiones persistentes con JWT y protección de rutas reales.",
+    built:
+      "Se implementó un frontend en React 19 con Context API y rutas protegidas. Backend Node.js/Express con MongoDB Atlas, JWT, bcryptjs, celebrate/Joi y logging con winston.",
+    result:
+      "Resultado final: App full-stack desplegada con 10 endpoints REST y flujo de autenticación de extremo a extremo. El proyecto donde más crecí durante el bootcamp.",
+    stack: [
+      "React 19",
+      "Node.js",
+      "Express",
+      "MongoDB Atlas",
+      "JWT",
+      "bcryptjs",
+      "Vercel",
+      "Render",
+    ],
+    image: `${import.meta.env.BASE_URL}assets/Web_Api_full_Captura.png`,
+    color: "#0d1b2a",
+    demoUrl: "https://web-project-api-full-jade.vercel.app/",
+    githubUrl: "https://github.com/Javiermll/web_project_api_full",
+  },
+  {
+    title: "Around The U.S. React",
+    badge: "⚛️ Bootcamp",
+    description:
+      "El objetivo era reescribir una aplicación de JavaScript vanilla con manipulación directa del DOM a una arquitectura declarativa en React.",
+    built:
+      "Reescritura completa en React 19 con componentes funcionales, hooks y Context API. 10+ componentes con responsabilidades claramente separadas.",
+    result:
+      "Resultado final: Aplicación migrada y desplegada. El proyecto que me enseñó a pensar en componentes y estado antes de escribir código.",
+    stack: [
+      "React 19",
+      "Vite",
+      "Context API",
+      "CSS Modules",
+      "BEM",
+      "GitHub Pages",
+    ],
+    image: `${import.meta.env.BASE_URL}assets/React_Captura.png`,
+    color: "#0f2027",
+    demoUrl: "https://javiermll.github.io/web_project_around_react/",
+    githubUrl: "https://github.com/Javiermll/web_project_around_react",
+  },
+];
+
+function ProjectCard({ i, project, progress, range, targetScale, onImageClick }) {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start end", "start start"],
+  });
+
+  const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
+  const scale = useTransform(progress, range, [1, targetScale]);
+
+  return (
+    <div ref={container} className="project-sticky">
+      <motion.div
+        className="project-card"
+        style={{
+          backgroundColor: project.color,
+          scale,
+          top: `calc(-5vh + ${i * 25}px)`,
+        }}
+      >
+        <div className="project-card-header">
+          <span className="project-badge">{project.badge}</span>
+          <h3 className="project-title">{project.title}</h3>
+        </div>
+
+        <div className="project-card-body">
+          <div className="project-info">
+            <p className="project-description">{project.description}</p>
+            <p className="project-built">{project.built}</p>
+            <p className="project-result">{project.result}</p>
+
+            <div className="project-stack">
+              {project.stack.map((tech) => (
+                <span key={tech} className="project-tech">
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="project-links">
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Demo →
+              </a>
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub →
+                </a>
+              )}
+              {project.frontendUrl && (
+                <a
+                  href={project.frontendUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Frontend →
+                </a>
+              )}
+              {project.backendUrl && (
+                <a
+                  href={project.backendUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Backend →
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div
+            className="project-image-wrapper project-image-clickable"
+            onClick={() => onImageClick(project.image, project.title)}
+            title="Ver imagen"
+          >
+            <motion.div
+              className="project-image-inner"
+              style={{ scale: imageScale }}
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                onError={(e) => {
+                  e.currentTarget.style.opacity = "0.15";
+                }}
+              />
+            </motion.div>
+            <div className="project-image-hint">🔍</div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export default function Projects() {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  const [lightbox, setLightbox] = useState(null);
+  const openLightbox = useCallback((src, alt) => setLightbox({ src, alt }), []);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+
+  return (
+    <section id="projects" className="projects-section">
+      <p className="section-title">Proyectos</p>
+      <div ref={container}>
+        {projects.map((project, i) => (
+          <ProjectCard
+            key={project.title}
+            i={i}
+            project={project}
+            progress={scrollYProgress}
+            range={[i / projects.length, (i + 1) / projects.length]}
+            targetScale={1 - (projects.length - i) * 0.05}
+            onImageClick={openLightbox}
+          />
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {lightbox && (
+          <ImageLightbox
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClose={closeLightbox}
+          />
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}

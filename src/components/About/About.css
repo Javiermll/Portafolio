@@ -1,0 +1,332 @@
+.about-section {
+  padding: 100px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.about-photo {
+  max-width: 35vh;
+  justify-self: anchor-center;
+}
+
+/* ── Fade helpers ── */
+.fade-section,
+.fade-left,
+.fade-right,
+.fade-up {
+  opacity: 0;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.fade-left {
+  transform: translateX(-28px);
+}
+.fade-right {
+  transform: translateX(28px);
+}
+.fade-up {
+  transform: translateY(28px);
+}
+
+.is-visible {
+  opacity: 1 !important;
+  transform: none !important;
+  text-align: justify;
+}
+
+/* ── Grid texto + foto ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  margin-bottom: 64px;
+}
+
+/* En desktop: foto va a col 2, texto a col 1 (el DOM tiene foto primero) */
+.about-photo-wrapper {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.about-text {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.about-text-highlight {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.about-photo-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.about-photo-glow {
+  position: absolute;
+  inset: -16px;
+  border-radius: 24px;
+  background: rgba(0, 180, 216, 0.12);
+  filter: blur(32px);
+  pointer-events: none;
+}
+
+.about-photo {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+/* ── Value cards ── */
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.about-card {
+  padding: 28px 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.about-card {
+  transition: border-color 0.25s, background 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+
+.about-card:hover {
+  transform: translateY(-4px) scale(1.03);
+}
+
+/* ── Color único por tarjeta ── */
+
+/* Orientado a negocio → cian */
+.about-card:nth-child(1):hover {
+  border-color: #00b4d8;
+  background: rgba(0, 180, 216, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 180, 216, 0.2);
+}
+
+/* Enfocado en producción → verde */
+.about-card:nth-child(2):hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+}
+
+/* En crecimiento → violeta */
+.about-card:nth-child(3):hover {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.08);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+}
+
+.about-card-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.about-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.about-card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Tablet: 1080px – 546px ── */
+@media (max-width: 1080px) {
+  .about-section {
+    padding: 80px 32px;
+  }
+
+  /* Quitar grid y usar float para el layout [ Foto ][ Texto ] */
+  .about-grid {
+    display: block;
+    margin-bottom: 48px;
+  }
+
+  .about-photo-wrapper {
+    float: left;
+    width: 220px;
+    margin-right: 32px;
+    margin-bottom: 16px;
+    grid-column: unset;
+    grid-row: unset;
+  }
+
+  .about-photo {
+    max-width: 100%;
+    width: 220px;
+    height: 220px;
+  }
+
+  /* El texto fluye a la derecha de la foto y luego debajo */
+  .about-text {
+    grid-column: unset;
+    grid-row: unset;
+    overflow: hidden; /* BFC: evita que el texto se meta bajo la foto */
+    font-size: 14px;
+  }
+
+  /* Clearfix para que las cards no suban bajo la foto flotada */
+  .about-grid::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .about-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+/* ── 859px – 546px: foto+cards izq / texto der ── */
+@media (max-width: 859px) and (min-width: 546px) {
+  /* Section se convierte en grid de 2 columnas con áreas nombradas */
+  .about-section {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    grid-template-areas:
+      "title  title"
+      "photo  text"
+      "cards  text";
+    column-gap: 28px;
+    align-items: start;
+  }
+
+  .about-section > .section-title {
+    grid-area: title;
+  }
+
+  /* Disolver about-grid: sus hijos pasan a ser items del grid del section */
+  .about-grid {
+    display: contents;
+    margin-bottom: 0;
+  }
+
+  /* Reset del float aplicado en 1080px */
+  .about-photo-wrapper {
+    grid-area: photo;
+    float: none;
+    width: auto;
+    margin-right: 0;
+    margin-bottom: 12px;
+    align-self: start;
+  }
+
+  .about-photo {
+    width: 100%;
+    max-width: 190px;
+    height: 190px;
+  }
+
+  /* Texto ocupa columna derecha en ambas filas */
+  .about-text {
+    grid-area: text;
+    overflow: visible;
+    font-size: 13px;
+    place-self: center start;
+  }
+
+  /* Cards debajo de la foto, columna izquierda */
+  .about-cards {
+    grid-area: cards;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: start;
+    width: 100%;
+  }
+
+  .about-card {
+    flex: none;
+    width: 100%;
+    padding: 14px 12px;
+  }
+
+  .about-card-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .about-card-title {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .about-card-desc {
+    font-size: 11px;
+  }
+}
+
+/* ── Mobile: 545px – 320px ── */
+@media (max-width: 545px) {
+  .about-section {
+    padding: 64px 20px;
+  }
+
+  /* Volver a stack vertical: foto centrada arriba, texto abajo */
+  .about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-bottom: 36px;
+  }
+
+  .about-photo-wrapper {
+    float: none;
+    width: auto;
+    margin-right: 0;
+    display: flex;
+    justify-content: center;
+    order: -1;
+  }
+
+  .about-photo {
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+  }
+
+  .about-text {
+    font-size: 14px;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .about-card {
+    padding: 20px 18px;
+  }
+}
