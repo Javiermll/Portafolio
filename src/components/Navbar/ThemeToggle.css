@@ -1,0 +1,20 @@
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 10px;
+  background: var(--overlay-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.theme-toggle:hover {
+  background: var(--overlay-hover);
+  color: var(--text-primary);
+}

@@ -92,8 +92,15 @@
   margin-bottom: 16px;
 }
 
-.hero-location {
+.hero-stack-line {
   font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.hero-location {
+  font-size: 14px;
   color: var(--text-secondary);
   margin-bottom: 40px;
 }
@@ -259,8 +266,12 @@
     font-size: clamp(16px, 5vw, 22px);
     margin-bottom: 12px;
   }
-  .hero-location {
+  .hero-stack-line {
     font-size: 13px;
+  }
+
+  .hero-location {
+    font-size: 12px;
     margin-bottom: 28px;
   }
   .hero-btn {

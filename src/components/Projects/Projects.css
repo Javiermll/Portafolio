@@ -97,6 +97,85 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
+/* Acordeón de decisiones técnicas */
+.project-decisions {
+  margin-bottom: 10px;
+}
+
+.project-decisions-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 5px 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.project-decisions-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.project-decisions-arrow {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  line-height: 1;
+}
+
+.project-decisions-arrow--open {
+  transform: rotate(90deg);
+}
+
+.project-decisions-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.project-decisions-body--open {
+  max-height: 200px;
+}
+
+.project-decisions-list {
+  list-style: none;
+  padding: 10px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-decisions-list li {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+}
+
+.project-decisions-list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: rgba(0, 180, 216, 0.8);
+}
+
+/* Aviso cold start */
+.project-cold-start {
+  width: 100%;
+  font-size: 11px;
+  color: rgba(255, 210, 100, 0.8);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
 .project-links {
   display: flex;
   flex-wrap: wrap;

@@ -1,17 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
+  /* Dark mode (default) */
   --bg-primary: #0a0a0f;
   --bg-secondary: #0f0f1a;
   --bg-card: #13131f;
+  --bg-navbar: rgba(15, 15, 26, 0.85);
   --accent: #00b4d8;
   --accent-hover: #0096c7;
   --text-primary: #ffffff;
   --text-secondary: #a0a0b0;
   --text-muted: #606070;
   --border: rgba(255, 255, 255, 0.08);
+  --overlay-hover: rgba(255, 255, 255, 0.06);
+  --overlay-subtle: rgba(255, 255, 255, 0.04);
+  --btn-primary-text: #0a0a0f;
   --radius: 12px;
   --radius-lg: 20px;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-card: #eef0f5;
+  --bg-navbar: rgba(255, 255, 255, 0.88);
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #888898;
+  --border: rgba(0, 0, 0, 0.1);
+  --overlay-hover: rgba(0, 0, 0, 0.06);
+  --overlay-subtle: rgba(0, 0, 0, 0.04);
+  --btn-primary-text: #ffffff;
 }
 
 * {
@@ -30,6 +49,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {

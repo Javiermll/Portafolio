@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
@@ -9,7 +9,22 @@ import Experience from './components/Experience/Experience'
 import Contact from './components/Contact/Contact'
 import './App.css'
 
+function getInitialTheme() {
+  const saved = localStorage.getItem('theme')
+  if (saved === 'light' || saved === 'dark') return saved
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+}
+
 function App() {
+  const [theme, setTheme] = useState(getInitialTheme)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -22,13 +37,12 @@ function App() {
     }
 
     requestAnimationFrame(raf)
-
     return () => lenis.destroy()
   }, [])
 
   return (
     <>
-      <Navbar />
+      <Navbar theme={theme} onToggleTheme={toggleTheme} />
       <Hero />
       <About />
       <Projects />

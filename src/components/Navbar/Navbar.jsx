@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useOnClickOutside } from 'usehooks-ts'
 import { Home, User, FolderCode, Layers, Briefcase, Mail } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 import './Navbar.css'
 
 const tabs = [
@@ -31,7 +32,7 @@ const spanVariants = {
 
 const transition = { delay: 0.1, type: 'spring', bounce: 0, duration: 0.6 }
 
-export default function Navbar() {
+export default function Navbar({ theme, onToggleTheme }) {
   const [selected, setSelected] = useState(null)
   const ref = useRef(null)
 
@@ -79,6 +80,9 @@ export default function Navbar() {
             </motion.button>
           )
         })}
+
+        <div className="navbar-separator" />
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
       </div>
     </nav>
   )

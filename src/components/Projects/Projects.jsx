@@ -46,14 +46,12 @@ const projects = [
       "Por eso, implementé una SPA institucional con React 19 y Vite, 6 páginas y diseño 100% responsivo. Backend propio en Node.js/Express con formulario de cotización, Nodemailer, rate-limiting y honeypot anti-spam.",
     result:
       "Con ello, la empresa pasó de cero presencia digital a tener un canal formal de captación de clientes. Primer proyecto en producción con cliente real.",
-    stack: [
-      "React 19",
-      "Vite",
-      "Node.js",
-      "Express",
-      "Nodemailer",
-      "Open-Meteo API",
+    decisions: [
+      "React 19 + Vite sobre Next.js — sitio institucional estático sin necesidad de SSR, compatible con hosting gratuito en GitHub Pages",
+      "Nodemailer sobre SendGrid — sin costo, control directo del servidor SMTP, suficiente para el volumen de solicitudes esperado",
+      "Honeypot + rate-limiting sobre reCAPTCHA — menos fricción para el usuario, efectivo contra bots simples en formularios de contacto",
     ],
+    stack: ["React 19", "Vite", "Node.js", "Express", "Nodemailer", "Open-Meteo API"],
     image: `${import.meta.env.BASE_URL}assets/Hidrorural_Captura2.png`,
     color: "#1a1a2e",
     demoUrl: "https://javiermll.github.io/contructora-hidrorural-frontend/",
@@ -69,16 +67,13 @@ const projects = [
       "Se implementó un frontend en React 19 con Context API y rutas protegidas. Backend Node.js/Express con MongoDB Atlas, JWT, bcryptjs, celebrate/Joi y logging con winston.",
     result:
       "Resultado final: App full-stack desplegada con 10 endpoints REST y flujo de autenticación de extremo a extremo. El proyecto donde más crecí durante el bootcamp.",
-    stack: [
-      "React 19",
-      "Node.js",
-      "Express",
-      "MongoDB Atlas",
-      "JWT",
-      "bcryptjs",
-      "Vercel",
-      "Render",
+    decisions: [
+      "JWT sobre sessions — stateless, escalable horizontalmente, estándar en APIs REST modernas",
+      "MongoDB Atlas sobre SQL — esquema flexible para MVP, menor fricción de setup, nativo con el stack JavaScript",
+      "Celebrate/Joi para validación — lógica declarativa en el servidor, separa validación del controlador y mejora mantenibilidad",
     ],
+    coldStart: true,
+    stack: ["React 19", "Node.js", "Express", "MongoDB Atlas", "JWT", "bcryptjs", "Vercel", "Render"],
     image: `${import.meta.env.BASE_URL}assets/Web_Api_full_Captura.png`,
     color: "#0d1b2a",
     demoUrl: "https://web-project-api-full-jade.vercel.app/",
@@ -93,14 +88,12 @@ const projects = [
       "Reescritura completa en React 19 con componentes funcionales, hooks y Context API. 10+ componentes con responsabilidades claramente separadas.",
     result:
       "Resultado final: Aplicación migrada y desplegada. El proyecto que me enseñó a pensar en componentes y estado antes de escribir código.",
-    stack: [
-      "React 19",
-      "Vite",
-      "Context API",
-      "CSS Modules",
-      "BEM",
-      "GitHub Pages",
+    decisions: [
+      "Context API sobre Redux — aplicación pequeña sin necesidad de store global complejo, evita boilerplate innecesario",
+      "Componentes funcionales + hooks exclusivamente — sin class components, código más limpio y predecible",
+      "BEM adaptado a componentes — mantener convenciones CSS conocidas al migrar de vanilla JS a React",
     ],
+    stack: ["React 19", "Vite", "Context API", "CSS Modules", "BEM", "GitHub Pages"],
     image: `${import.meta.env.BASE_URL}assets/React_Captura.png`,
     color: "#0f2027",
     demoUrl: "https://javiermll.github.io/web_project_around_react/",
@@ -110,6 +103,8 @@ const projects = [
 
 function ProjectCard({ i, project, progress, range, targetScale, onImageClick }) {
   const container = useRef(null);
+  const [decisionsOpen, setDecisionsOpen] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start end", "start start"],
@@ -139,46 +134,54 @@ function ProjectCard({ i, project, progress, range, targetScale, onImageClick })
             <p className="project-built">{project.built}</p>
             <p className="project-result">{project.result}</p>
 
+            {/* Acordeón de decisiones técnicas */}
+            <div className="project-decisions">
+              <button
+                className="project-decisions-toggle"
+                onClick={() => setDecisionsOpen((o) => !o)}
+                aria-expanded={decisionsOpen}
+              >
+                <span>Por qué así</span>
+                <span className={`project-decisions-arrow ${decisionsOpen ? "project-decisions-arrow--open" : ""}`}>
+                  ›
+                </span>
+              </button>
+              <div className={`project-decisions-body ${decisionsOpen ? "project-decisions-body--open" : ""}`}>
+                <ul className="project-decisions-list">
+                  {project.decisions.map((d, idx) => (
+                    <li key={idx}>{d}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
             <div className="project-stack">
               {project.stack.map((tech) => (
-                <span key={tech} className="project-tech">
-                  {tech}
-                </span>
+                <span key={tech} className="project-tech">{tech}</span>
               ))}
             </div>
 
             <div className="project-links">
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                 Demo →
               </a>
+              {project.coldStart && (
+                <p className="project-cold-start">
+                  ⚠️ Backend en Render free tier — la primera petición puede tardar ~30s mientras el servidor arranca.
+                </p>
+              )}
               {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                   GitHub →
                 </a>
               )}
               {project.frontendUrl && (
-                <a
-                  href={project.frontendUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={project.frontendUrl} target="_blank" rel="noopener noreferrer">
                   Frontend →
                 </a>
               )}
               {project.backendUrl && (
-                <a
-                  href={project.backendUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={project.backendUrl} target="_blank" rel="noopener noreferrer">
                   Backend →
                 </a>
               )}
@@ -190,16 +193,11 @@ function ProjectCard({ i, project, progress, range, targetScale, onImageClick })
             onClick={() => onImageClick(project.image, project.title)}
             title="Ver imagen"
           >
-            <motion.div
-              className="project-image-inner"
-              style={{ scale: imageScale }}
-            >
+            <motion.div className="project-image-inner" style={{ scale: imageScale }}>
               <img
                 src={project.image}
                 alt={project.title}
-                onError={(e) => {
-                  e.currentTarget.style.opacity = "0.15";
-                }}
+                onError={(e) => { e.currentTarget.style.opacity = "0.15"; }}
               />
             </motion.div>
             <div className="project-image-hint">🔍</div>
@@ -240,11 +238,7 @@ export default function Projects() {
 
       <AnimatePresence>
         {lightbox && (
-          <ImageLightbox
-            src={lightbox.src}
-            alt={lightbox.alt}
-            onClose={closeLightbox}
-          />
+          <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} />
         )}
       </AnimatePresence>
     </section>

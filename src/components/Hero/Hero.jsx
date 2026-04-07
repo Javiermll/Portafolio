@@ -94,8 +94,11 @@ export default function Hero() {
 
         <h1 className="hero-name">Javier Muñoz</h1>
         <h2 className="hero-subtitle">Full-Stack Developer</h2>
+        <p className="hero-stack-line">
+          React &amp; Node.js · Del requerimiento de negocio al producto en producción
+        </p>
         <p className="hero-location">
-          Concepción, Chile · Disponible para trabajo en LATAM
+          Concepción, Chile · Disponible para trabajo remoto en LATAM
         </p>
 
         <div className="hero-ctas">
