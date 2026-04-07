@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useTransform, motion, useScroll, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import "./Projects.css";
 
+/* ── Lightbox ── */
 function ImageLightbox({ src, alt, onClose }) {
   useEffect(() => {
     const handleKey = (e) => { if (e.key === "Escape") onClose(); };
@@ -36,6 +37,7 @@ function ImageLightbox({ src, alt, onClose }) {
   );
 }
 
+/* ── Datos ── */
 const projects = [
   {
     title: "Constructora Hidrorural",
@@ -43,9 +45,9 @@ const projects = [
     description:
       "Hidrorural dependía casi exclusivamente de licitaciones con el MOP. Sin web ni canal de contacto formal, las solicitudes llegaban por teléfono de forma informal.",
     built:
-      "Por eso, implementé una SPA institucional con React 19 y Vite, 6 páginas y diseño 100% responsivo. Backend propio en Node.js/Express con formulario de cotización, Nodemailer, rate-limiting y honeypot anti-spam.",
+      "SPA institucional con React 19 y Vite, 6 páginas y diseño 100% responsivo. Backend propio en Node.js/Express con formulario de cotización, Nodemailer, rate-limiting y honeypot anti-spam.",
     result:
-      "Con ello, la empresa pasó de cero presencia digital a tener un canal formal de captación de clientes. Primer proyecto en producción con cliente real.",
+      "La empresa pasó de cero presencia digital a tener un canal formal de captación de clientes. Primer proyecto en producción con cliente real.",
     decisions: [
       "React 19 + Vite sobre Next.js — sitio institucional estático sin necesidad de SSR, compatible con hosting gratuito en GitHub Pages",
       "Nodemailer sobre SendGrid — sin costo, control directo del servidor SMTP, suficiente para el volumen de solicitudes esperado",
@@ -62,11 +64,11 @@ const projects = [
     title: "Around The U.S. Full-Stack",
     badge: "🔐 Proyecto Final Bootcamp",
     description:
-      "Construir una aplicación full-stack completa con registro y login seguros, sesiones persistentes con JWT y protección de rutas reales.",
+      "Aplicación full-stack completa con registro y login seguros, sesiones persistentes con JWT y protección de rutas reales.",
     built:
-      "Se implementó un frontend en React 19 con Context API y rutas protegidas. Backend Node.js/Express con MongoDB Atlas, JWT, bcryptjs, celebrate/Joi y logging con winston.",
+      "Frontend en React 19 con Context API y rutas protegidas. Backend Node.js/Express con MongoDB Atlas, JWT, bcryptjs, celebrate/Joi y logging con winston.",
     result:
-      "Resultado final: App full-stack desplegada con 10 endpoints REST y flujo de autenticación de extremo a extremo. El proyecto donde más crecí durante el bootcamp.",
+      "App full-stack desplegada con 10 endpoints REST y flujo de autenticación de extremo a extremo. El proyecto donde más crecí durante el bootcamp.",
     decisions: [
       "JWT sobre sessions — stateless, escalable horizontalmente, estándar en APIs REST modernas",
       "MongoDB Atlas sobre SQL — esquema flexible para MVP, menor fricción de setup, nativo con el stack JavaScript",
@@ -83,11 +85,11 @@ const projects = [
     title: "Around The U.S. React",
     badge: "⚛️ Bootcamp",
     description:
-      "El objetivo era reescribir una aplicación de JavaScript vanilla con manipulación directa del DOM a una arquitectura declarativa en React.",
+      "Migración de una aplicación JavaScript vanilla con manipulación directa del DOM a una arquitectura declarativa en React.",
     built:
       "Reescritura completa en React 19 con componentes funcionales, hooks y Context API. 10+ componentes con responsabilidades claramente separadas.",
     result:
-      "Resultado final: Aplicación migrada y desplegada. El proyecto que me enseñó a pensar en componentes y estado antes de escribir código.",
+      "Aplicación migrada y desplegada. El proyecto que me enseñó a pensar en componentes y estado antes de escribir código.",
     decisions: [
       "Context API sobre Redux — aplicación pequeña sin necesidad de store global complejo, evita boilerplate innecesario",
       "Componentes funcionales + hooks exclusivamente — sin class components, código más limpio y predecible",
@@ -101,120 +103,132 @@ const projects = [
   },
 ];
 
-function ProjectCard({ i, project, progress, range, targetScale, onImageClick }) {
-  const container = useRef(null);
+/* ── Hook fade-in por card ── */
+function useFadeIn() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("project-card--visible");
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
+/* ── Card individual ── */
+function ProjectCard({ project, onImageClick }) {
+  const cardRef = useFadeIn();
   const [decisionsOpen, setDecisionsOpen] = useState(false);
 
-  const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start end", "start start"],
-  });
-
-  const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
-  const scale = useTransform(progress, range, [1, targetScale]);
-
   return (
-    <div ref={container} className="project-sticky">
-      <motion.div
-        className="project-card"
-        style={{
-          backgroundColor: project.color,
-          scale,
-          top: `calc(-5vh + ${i * 25}px)`,
-        }}
-      >
-        <div className="project-card-header">
-          <span className="project-badge">{project.badge}</span>
-          <h3 className="project-title">{project.title}</h3>
-        </div>
+    <article
+      ref={cardRef}
+      className="project-card"
+      style={{ "--card-color": project.color }}
+    >
+      {/* Cabecera */}
+      <div className="project-card-header">
+        <span className="project-badge">{project.badge}</span>
+        <h3 className="project-title">{project.title}</h3>
+      </div>
 
-        <div className="project-card-body">
-          <div className="project-info">
+      {/* Cuerpo: info | imagen */}
+      <div className="project-card-body">
+
+        {/* Columna info */}
+        <div className="project-info">
+          <div className="project-texts">
             <p className="project-description">{project.description}</p>
             <p className="project-built">{project.built}</p>
             <p className="project-result">{project.result}</p>
+          </div>
 
-            {/* Acordeón de decisiones técnicas */}
-            <div className="project-decisions">
-              <button
-                className="project-decisions-toggle"
-                onClick={() => setDecisionsOpen((o) => !o)}
-                aria-expanded={decisionsOpen}
-              >
-                <span>Por qué así</span>
-                <span className={`project-decisions-arrow ${decisionsOpen ? "project-decisions-arrow--open" : ""}`}>
-                  ›
-                </span>
-              </button>
-              <div className={`project-decisions-body ${decisionsOpen ? "project-decisions-body--open" : ""}`}>
-                <ul className="project-decisions-list">
-                  {project.decisions.map((d, idx) => (
-                    <li key={idx}>{d}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="project-stack">
-              {project.stack.map((tech) => (
-                <span key={tech} className="project-tech">{tech}</span>
-              ))}
-            </div>
-
-            <div className="project-links">
-              <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                Demo →
-              </a>
-              {project.coldStart && (
-                <p className="project-cold-start">
-                  ⚠️ Backend en Render free tier — la primera petición puede tardar ~30s mientras el servidor arranca.
-                </p>
-              )}
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                  GitHub →
-                </a>
-              )}
-              {project.frontendUrl && (
-                <a href={project.frontendUrl} target="_blank" rel="noopener noreferrer">
-                  Frontend →
-                </a>
-              )}
-              {project.backendUrl && (
-                <a href={project.backendUrl} target="_blank" rel="noopener noreferrer">
-                  Backend →
-                </a>
-              )}
+          {/* Acordeón decisiones técnicas */}
+          <div className="project-decisions">
+            <button
+              className="project-decisions-toggle"
+              onClick={() => setDecisionsOpen((o) => !o)}
+              aria-expanded={decisionsOpen}
+            >
+              <span>Por qué así</span>
+              <span className={`project-decisions-arrow ${decisionsOpen ? "project-decisions-arrow--open" : ""}`}>
+                ›
+              </span>
+            </button>
+            <div className={`project-decisions-body ${decisionsOpen ? "project-decisions-body--open" : ""}`}>
+              <ul className="project-decisions-list">
+                {project.decisions.map((d, i) => (
+                  <li key={i}>{d}</li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div
-            className="project-image-wrapper project-image-clickable"
-            onClick={() => onImageClick(project.image, project.title)}
-            title="Ver imagen"
-          >
-            <motion.div className="project-image-inner" style={{ scale: imageScale }}>
-              <img
-                src={project.image}
-                alt={project.title}
-                onError={(e) => { e.currentTarget.style.opacity = "0.15"; }}
-              />
-            </motion.div>
-            <div className="project-image-hint">🔍</div>
+          {/* Stack */}
+          <div className="project-stack">
+            {project.stack.map((tech) => (
+              <span key={tech} className="project-tech">{tech}</span>
+            ))}
+          </div>
+
+          {/* Links */}
+          <div className="project-links">
+            <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link project-link--primary">
+              Demo →
+            </a>
+            {project.githubUrl && (
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                GitHub →
+              </a>
+            )}
+            {project.frontendUrl && (
+              <a href={project.frontendUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                Frontend →
+              </a>
+            )}
+            {project.backendUrl && (
+              <a href={project.backendUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                Backend →
+              </a>
+            )}
+            {project.coldStart && (
+              <p className="project-cold-start">
+                ⚠️ Backend en Render free tier — la primera petición puede tardar ~30s mientras el servidor arranca.
+              </p>
+            )}
           </div>
         </div>
-      </motion.div>
-    </div>
+
+        {/* Columna imagen */}
+        <div
+          className="project-image-wrapper project-image-clickable"
+          onClick={() => onImageClick(project.image, project.title)}
+          title="Ver imagen completa"
+        >
+          <img
+            src={project.image}
+            alt={project.title}
+            className="project-image"
+            onError={(e) => { e.currentTarget.style.opacity = "0.15"; }}
+          />
+          <div className="project-image-hint">🔍</div>
+        </div>
+      </div>
+    </article>
   );
 }
 
+/* ── Sección principal ── */
 export default function Projects() {
-  const container = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start start", "end end"],
-  });
-
   const [lightbox, setLightbox] = useState(null);
   const openLightbox = useCallback((src, alt) => setLightbox({ src, alt }), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
@@ -222,15 +236,12 @@ export default function Projects() {
   return (
     <section id="projects" className="projects-section">
       <p className="section-title">Proyectos</p>
-      <div ref={container}>
-        {projects.map((project, i) => (
+
+      <div className="projects-list">
+        {projects.map((project) => (
           <ProjectCard
             key={project.title}
-            i={i}
             project={project}
-            progress={scrollYProgress}
-            range={[i / projects.length, (i + 1) / projects.length]}
-            targetScale={1 - (projects.length - i) * 0.05}
             onImageClick={openLightbox}
           />
         ))}
