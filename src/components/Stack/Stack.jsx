@@ -14,7 +14,7 @@ const categories = [
       { name: 'React',        icon: 'react/react-original.svg' },
       { name: 'React Router', icon: 'reactrouter/reactrouter-original.svg' },
       { name: 'Vite',         icon: 'vite/vite-original.svg' },
-      { name: 'Tailwind',     icon: 'tailwindcss/tailwindcss-original.svg', badge: 'en formación' },
+      { name: 'Tailwind',     icon: 'tailwindcss/tailwindcss-original.svg' },
     ],
   },
   {

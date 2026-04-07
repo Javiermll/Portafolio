@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Projects.css";
 
@@ -103,146 +103,160 @@ const projects = [
   },
 ];
 
-/* ── Hook fade-in por card ── */
-function useFadeIn() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("project-card--visible");
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return ref;
-}
-
-/* ── Card individual ── */
-function ProjectCard({ project, onImageClick }) {
-  const cardRef = useFadeIn();
-  const [decisionsOpen, setDecisionsOpen] = useState(false);
-
-  return (
-    <article
-      ref={cardRef}
-      className="project-card"
-      style={{ "--card-color": project.color }}
-    >
-      {/* Cabecera */}
-      <div className="project-card-header">
-        <span className="project-badge">{project.badge}</span>
-        <h3 className="project-title">{project.title}</h3>
-      </div>
-
-      {/* Cuerpo: info | imagen */}
-      <div className="project-card-body">
-
-        {/* Columna info */}
-        <div className="project-info">
-          <div className="project-texts">
-            <p className="project-description">{project.description}</p>
-            <p className="project-built">{project.built}</p>
-            <p className="project-result">{project.result}</p>
-          </div>
-
-          {/* Acordeón decisiones técnicas */}
-          <div className="project-decisions">
-            <button
-              className="project-decisions-toggle"
-              onClick={() => setDecisionsOpen((o) => !o)}
-              aria-expanded={decisionsOpen}
-            >
-              <span>Por qué así</span>
-              <span className={`project-decisions-arrow ${decisionsOpen ? "project-decisions-arrow--open" : ""}`}>
-                ›
-              </span>
-            </button>
-            <div className={`project-decisions-body ${decisionsOpen ? "project-decisions-body--open" : ""}`}>
-              <ul className="project-decisions-list">
-                {project.decisions.map((d, i) => (
-                  <li key={i}>{d}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Stack */}
-          <div className="project-stack">
-            {project.stack.map((tech) => (
-              <span key={tech} className="project-tech">{tech}</span>
-            ))}
-          </div>
-
-          {/* Links */}
-          <div className="project-links">
-            <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link project-link--primary">
-              Demo →
-            </a>
-            {project.githubUrl && (
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                GitHub →
-              </a>
-            )}
-            {project.frontendUrl && (
-              <a href={project.frontendUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                Frontend →
-              </a>
-            )}
-            {project.backendUrl && (
-              <a href={project.backendUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                Backend →
-              </a>
-            )}
-            {project.coldStart && (
-              <p className="project-cold-start">
-                ⚠️ Backend en Render free tier — la primera petición puede tardar ~30s mientras el servidor arranca.
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Columna imagen */}
-        <div
-          className="project-image-wrapper project-image-clickable"
-          onClick={() => onImageClick(project.image, project.title)}
-          title="Ver imagen completa"
-        >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="project-image"
-            onError={(e) => { e.currentTarget.style.opacity = "0.15"; }}
-          />
-          <div className="project-image-hint">🔍</div>
-        </div>
-      </div>
-    </article>
-  );
-}
+/* ── Variantes de animación ── */
+const cardVariants = {
+  enter: (dir) => ({ x: dir > 0 ? 80 : -80, opacity: 0, scale: 0.97 }),
+  center: { x: 0, opacity: 1, scale: 1 },
+  exit: (dir) => ({ x: dir > 0 ? -80 : 80, opacity: 0, scale: 0.97 }),
+};
 
 /* ── Sección principal ── */
 export default function Projects() {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [decisionsOpen, setDecisionsOpen] = useState(false);
   const [lightbox, setLightbox] = useState(null);
-  const openLightbox = useCallback((src, alt) => setLightbox({ src, alt }), []);
+
+  const goTo = useCallback((idx) => {
+    setDirection(idx > current ? 1 : -1);
+    setCurrent(idx);
+    setDecisionsOpen(false);
+  }, [current]);
+
+  const goNext = () => goTo((current + 1) % projects.length);
+  const goPrev = () => goTo((current - 1 + projects.length) % projects.length);
+
+  const project  = projects[current];
+  const ghost1   = projects[(current + 1) % projects.length];
+  const ghost2   = projects[(current + 2) % projects.length];
+
+  const openLightbox  = useCallback((src, alt) => setLightbox({ src, alt }), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
 
   return (
     <section id="projects" className="projects-section">
       <p className="section-title">Proyectos</p>
 
-      <div className="projects-list">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.title}
-            project={project}
-            onImageClick={openLightbox}
+      <div className="projects-carousel">
+        {/* Flecha izquierda */}
+        <button className="carousel-arrow carousel-arrow--prev" onClick={goPrev} aria-label="Proyecto anterior">
+          ‹
+        </button>
+
+        {/* Stack de tarjetas */}
+        <div className="projects-stack-wrapper">
+          {/* Tarjetas fantasma (apiladas detrás) */}
+          <div className="project-ghost project-ghost--2" style={{ background: ghost1.color }} />
+          <div className="project-ghost project-ghost--3" style={{ background: ghost2.color }} />
+
+          {/* Tarjeta activa con animación */}
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.article
+              key={current}
+              className="project-card"
+              style={{ "--card-color": project.color }}
+              custom={direction}
+              variants={cardVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              {/* Cabecera */}
+              <div className="project-card-header">
+                <span className="project-badge">{project.badge}</span>
+                <h3 className="project-title">{project.title}</h3>
+              </div>
+
+              {/* Cuerpo */}
+              <div className="project-card-body">
+                {/* Info */}
+                <div className="project-info">
+                  <div className="project-texts">
+                    <p className="project-description">{project.description}</p>
+                    <p className="project-built">{project.built}</p>
+                    <p className="project-result">{project.result}</p>
+                  </div>
+
+                  {/* Acordeón */}
+                  <div className="project-decisions">
+                    <button
+                      className="project-decisions-toggle"
+                      onClick={() => setDecisionsOpen((o) => !o)}
+                      aria-expanded={decisionsOpen}
+                    >
+                      <span>Por qué así</span>
+                      <span className={`project-decisions-arrow ${decisionsOpen ? "project-decisions-arrow--open" : ""}`}>›</span>
+                    </button>
+                    <div className={`project-decisions-body ${decisionsOpen ? "project-decisions-body--open" : ""}`}>
+                      <ul className="project-decisions-list">
+                        {project.decisions.map((d, i) => <li key={i}>{d}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Stack */}
+                  <div className="project-stack">
+                    {project.stack.map((tech) => (
+                      <span key={tech} className="project-tech">{tech}</span>
+                    ))}
+                  </div>
+
+                  {/* Links */}
+                  <div className="project-links">
+                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="project-link project-link--primary">
+                      Demo →
+                    </a>
+                    {project.githubUrl && (
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">GitHub →</a>
+                    )}
+                    {project.frontendUrl && (
+                      <a href={project.frontendUrl} target="_blank" rel="noopener noreferrer" className="project-link">Frontend →</a>
+                    )}
+                    {project.backendUrl && (
+                      <a href={project.backendUrl} target="_blank" rel="noopener noreferrer" className="project-link">Backend →</a>
+                    )}
+                    {project.coldStart && (
+                      <p className="project-cold-start">
+                        ⚠️ Backend en Render free tier — la primera petición puede tardar ~30s mientras el servidor arranca.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Imagen */}
+                <div
+                  className="project-image-wrapper project-image-clickable"
+                  onClick={() => openLightbox(project.image, project.title)}
+                  title="Ver imagen completa"
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-image"
+                    onError={(e) => { e.currentTarget.style.opacity = "0.15"; }}
+                  />
+                  <div className="project-image-hint">🔍</div>
+                </div>
+              </div>
+            </motion.article>
+          </AnimatePresence>
+        </div>
+
+        {/* Flecha derecha */}
+        <button className="carousel-arrow carousel-arrow--next" onClick={goNext} aria-label="Siguiente proyecto">
+          ›
+        </button>
+      </div>
+
+      {/* Dots de navegación */}
+      <div className="carousel-dots">
+        {projects.map((_, i) => (
+          <button
+            key={i}
+            className={`carousel-dot ${i === current ? "carousel-dot--active" : ""}`}
+            onClick={() => goTo(i)}
+            aria-label={`Ir al proyecto ${i + 1}`}
           />
         ))}
       </div>
