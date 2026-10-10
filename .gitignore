@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 .DS_Store
+
+# Material de trabajo local: ruta de avance, guías, borradores de diseño e insumos personales
+doc/
+CLAUDE.md
