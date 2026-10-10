@@ -1,0 +1,121 @@
+.profile {
+  background: var(--bg);
+  border-bottom: 2px solid var(--ink);
+}
+
+.profile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  margin-bottom: clamp(26px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.profile-tab {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 99px;
+  padding: 9px 18px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.profile-tab:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.profile-tab--on,
+.profile-tab--on:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: none;
+  transform: none;
+}
+
+.profile-arrows {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profile-arrow:hover {
+  background: var(--yellow);
+}
+
+.profile-count {
+  min-width: 40px;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+/* Sin tarjeta contenedora: el contenido de cada diapositiva va directo sobre el fondo */
+.profile-panel .wrap {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.profile-stage {
+  min-height: 420px;
+}
+
+@media (max-width: 640px) {
+  .profile-tab {
+    padding: 12px 16px;
+  }
+
+  .profile-arrow {
+    width: 44px;
+    height: 44px;
+  }
+
+  .profile-arrows {
+    margin-left: auto;
+  }
+
+  .profile-stage {
+    min-height: 0;
+  }
+}
+
+/* Móvil: pestañas y flechas centradas */
+@media (max-width: 600px) {
+  .profile-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .profile-tabs {
+    justify-content: center;
+  }
+
+  .profile-arrows {
+    margin-left: 0;
+    justify-content: center;
+  }
+}

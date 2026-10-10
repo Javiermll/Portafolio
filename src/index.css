@@ -1,36 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* ── Sistema de diseño ──
+   Mezcla elegida: titulares y botones neo-pop (E), navbar y bloque «qué hago» suizos (B),
+   foto circular topográfica (D) y tabla de proyectos tipo panel (F). Tema claro único. */
 
 :root {
-  /* Dark mode (default) */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #0f0f1a;
-  --bg-card: #13131f;
-  --bg-navbar: rgba(15, 15, 26, 0.85);
-  --accent: #00b4d8;
-  --accent-hover: #0096c7;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #606070;
-  --border: rgba(255, 255, 255, 0.08);
-  --overlay-hover: rgba(255, 255, 255, 0.06);
-  --overlay-subtle: rgba(255, 255, 255, 0.04);
-  --btn-primary-text: #0a0a0f;
-  --radius: 12px;
-  --radius-lg: 20px;
-}
+  --bg: #ffffff;
+  --bg-soft: #f3f5f6;
+  --ink: #111111;
+  --ink-2: #4b5563;
+  --line: #dde3e5;
+  --yellow: #ffd83d;
+  --pink: #ff7ab8;
+  --blue: #2f5bff;
+  --green: #3ddc97;
+  --paper: #f4f1ea;
 
-[data-theme="light"] {
-  --bg-primary: #f8f9fa;
-  --bg-secondary: #ffffff;
-  --bg-card: #eef0f5;
-  --bg-navbar: rgba(255, 255, 255, 0.88);
-  --text-primary: #1a1a1a;
-  --text-secondary: #4a4a4a;
-  --text-muted: #888898;
-  --border: rgba(0, 0, 0, 0.1);
-  --overlay-hover: rgba(0, 0, 0, 0.06);
-  --overlay-subtle: rgba(0, 0, 0, 0.04);
-  --btn-primary-text: #ffffff;
+  --border: 3px solid var(--ink);
+  --shadow: 5px 5px 0 var(--ink);
+  --shadow-sm: 3px 3px 0 var(--ink);
+
+  --font-display: 'Dela Gothic One', Impact, sans-serif;
+  --font-body: 'Work Sans', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+
+  --gutter: clamp(16px, 4vw, 44px);
+  --max: 1200px;
 }
 
 * {
@@ -41,15 +34,16 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 76px;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  background: var(--bg);
+  color: var(--ink);
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
@@ -59,15 +53,132 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
-.section-title {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -64px;
+  z-index: 100;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 10px 16px;
+  transition: top 0.15s;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+main:focus {
+  outline: none;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
   text-transform: uppercase;
-  color: var(--accent);
-  text-align: center;
-  margin-bottom: 48px;
+  letter-spacing: 0.08em;
+}
+
+/* Título de sección: sobrio, con una palabra subrayada con marcador */
+.sec-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(28px, 4.2vw, 54px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  text-wrap: balance;
+}
+
+.sec-title mark {
+  color: inherit;
+  background: linear-gradient(transparent 60%, var(--green) 60%, var(--green) 92%, transparent 92%);
+  padding-inline: 0.05em;
+}
+
+.sec-sub {
+  color: var(--ink-2);
+  max-width: 62ch;
+  margin-bottom: 34px;
+}
+
+/* Botones neo-pop */
+.btn {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 16px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 12px 24px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.btn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--dark {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn--pink {
+  background: var(--pink);
+}
+
+.btn--yellow {
+  background: var(--yellow);
+}
+
+section {
+  padding-block: clamp(48px, 7vw, 88px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Móvil: títulos y subtítulos centrados (los párrafos largos siguen a la izquierda para leerse bien) */
+@media (max-width: 600px) {
+  .sec-title,
+  .sec-sub {
+    text-align: center;
+    margin-inline: auto;
+  }
 }

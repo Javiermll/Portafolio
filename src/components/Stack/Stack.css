@@ -1,166 +1,91 @@
-.stack-section {
-  padding: 0 24px;
-  max-width: 1100px;
-  margin: 0 auto;
+.stack .sec-title {
+  font-size: clamp(26px, 3.2vw, 42px);
+  margin-bottom: 10px;
 }
 
-.fade-up {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.65s ease,
-    transform 0.65s ease;
+.stack .sec-sub {
+  margin-bottom: 24px;
+  font-size: 16px;
 }
 
-.is-visible {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-/* Grid de categorías */
 .stack-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
 }
 
-/* ── Tablet: 1080px – 546px ── */
-@media (max-width: 1080px) {
-  .stack-section {
-    padding: 80px 32px;
-  }
-  .stack-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ── Mobile: 545px – 320px ── */
-@media (max-width: 545px) {
-  .stack-section {
-    padding: 64px 20px;
-  }
-  .stack-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .stack-card {
-    padding: 18px 14px;
-    text-align: center;
-  }
-  .stack-card-header {
-    justify-content: center;
-  }
-  .stack-techs {
-    justify-content: center;
-  }
-  .stack-tech {
-    align-items: center;
-  }
-  .stack-tech-icon-wrapper {
-    width: 34px;
-    height: 34px;
-  }
-}
-
-/* Card de categoría */
 .stack-card {
-  padding: 24px 20px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  transition:
-    background 0.2s,
-    border-color 0.2s;
+  background: var(--bg-soft);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 16px 18px 18px;
 }
 
-.stack-card:hover {
-  background: rgba(255, 255, 255, 0.04);
+.stack-card h3 {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink-2);
 }
 
-.stack-card--highlight {
-  border-color: rgba(0, 180, 216, 0.3);
-  background: rgba(0, 180, 216, 0.04);
-}
-
-.stack-card-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.stack-card-emoji {
-  font-size: 18px;
-  line-height: 1;
-}
-
-.stack-card-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-/* Lista de tecnologías */
-.stack-techs {
+.stack-card ul {
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
-  padding: 14px 10px;
+  gap: 6px;
 }
 
-.stack-tech {
-  display: flex;
-  flex-direction: column;
+.tech {
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid var(--ink);
+  border-radius: 99px;
+  padding: 3px 11px 3px 7px;
+  background: #fff;
 }
 
-.stack-tech-icon-wrapper {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 6px;
-  transition: background 0.2s;
-}
-
-@keyframes vibrate {
-  0%,100% { transform: translate(0, 0) rotate(0deg); }
-  15%      { transform: translate(-2px, 1px) rotate(-2deg); }
-  30%      { transform: translate(2px, -1px) rotate(2deg); }
-  45%      { transform: translate(-2px, -1px) rotate(-1deg); }
-  60%      { transform: translate(2px, 1px) rotate(1deg); }
-  75%      { transform: translate(-1px, 2px) rotate(-1deg); }
-  90%      { transform: translate(1px, -1px) rotate(0deg); }
-}
-
-.stack-tech:hover .stack-tech-icon-wrapper {
-  background: rgba(255, 255, 255, 0.09);
-  animation: vibrate 0.5s ease infinite;
-}
-
-.stack-tech-icon {
-  width: 100%;
-  height: 100%;
+.tech img {
+  width: 18px;
+  height: 18px;
   object-fit: contain;
 }
 
-.stack-tech-name {
-  font-size: 10px;
-  color: var(--text-secondary);
-  text-align: center;
-  line-height: 1.2;
-  max-width: 48px;
+.tech:not(:has(img)) {
+  padding-left: 11px;
 }
 
-.stack-tech-badge {
-  font-size: 9px;
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
+.tech--learn {
+  background: var(--yellow);
+}
+
+.tech em {
+  font-style: normal;
+  font-size: 9.5px;
+  background: var(--ink);
+  color: var(--yellow);
+  border-radius: 99px;
+  padding: 1px 7px;
+}
+
+/* Tablet: encabezado centrado */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .stack .sec-title,
+  .stack .sec-sub {
+    text-align: center;
+    margin-inline: auto;
+  }
+}
+
+/* Móvil: tarjetas con título y chips centrados */
+@media (max-width: 600px) {
+  .stack-card h3 {
+    text-align: center;
+  }
+
+  .stack-card ul {
+    justify-content: center;
+  }
 }

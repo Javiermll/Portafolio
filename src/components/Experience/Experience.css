@@ -1,182 +1,418 @@
-.experience-section {
-  padding: 100px 24px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-/* Fade-in helpers (reutilizados aquí localmente) */
-.fade-item {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.65s ease, transform 0.65s ease;
-}
-
-.is-visible {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-/* ── Timeline ── */
-.timeline {
-  position: relative;
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-/* Línea vertical */
-.timeline-line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--border);
-  transform: translateX(-50%);
-}
-
-/* Ítem del timeline */
-.timeline-item {
-  position: relative;
-  display: flex;
-  margin-bottom: 48px;
-}
-
-/* Lado izquierdo: card a la izquierda, punto en el centro */
-.timeline-item--left {
-  justify-content: flex-end;
-  padding-right: calc(50% + 32px);
-}
-
-/* Lado derecho: card a la derecha */
-.timeline-item--right {
-  justify-content: flex-start;
-  padding-left: calc(50% + 32px);
-}
-
-/* Punto en la línea */
-.timeline-dot {
-  position: absolute;
-  left: 50%;
-  top: 16px;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  background: var(--bg-primary);
-  z-index: 1;
-}
-
-.timeline-dot-pulse {
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: dot-pulse 2s ease-in-out infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.25; }
-}
-
-/* Tarjeta */
-.timeline-card {
-  width: 100%;
-  padding: 24px 22px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.timeline-card:hover {
-  border-color: rgba(0, 180, 216, 0.2);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.timeline-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.timeline-card-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.4;
-}
-
-.timeline-badge-current {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(0, 180, 216, 0.12);
-  color: var(--accent);
-  border: 1px solid rgba(0, 180, 216, 0.25);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.timeline-company {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--accent);
-  margin-bottom: 2px;
-}
-
-.timeline-period {
-  font-size: 12px;
-  color: var(--text-muted);
+.exp .sec-title {
+  font-size: clamp(26px, 3.2vw, 42px);
   margin-bottom: 10px;
 }
 
-.timeline-desc {
+.exp .sec-sub {
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.exp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(20px, 4vw, 48px);
+  align-items: stretch;
+}
+
+/* Línea de tiempo vertical con puntos */
+.exp-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 22px;
+}
+
+.exp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 14px;
+  bottom: 14px;
+  border-left: 2px solid var(--ink);
+}
+
+.exp-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.exp-step:hover {
+  border-color: var(--ink);
+}
+
+.exp-step--on {
+  background: var(--yellow);
+  border-color: var(--ink);
+}
+
+.exp-dot {
+  position: absolute;
+  left: -22px;
+  top: 17px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+
+.exp-step--on .exp-dot {
+  background: var(--pink);
+}
+
+.exp-step-period {
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.exp-step--on .exp-step-period {
+  color: var(--ink);
+}
+
+.exp-step strong {
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.exp-step-org {
   font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.65;
+  color: var(--ink-2);
 }
 
-/* ── Tablet: 1080px – 546px ── */
-@media (max-width: 1080px) {
-  .experience-section {
-    padding: 80px 32px;
-  }
-  .timeline {
-    max-width: 640px;
+.exp-step--on .exp-step-org {
+  color: var(--ink);
+}
+
+/* Detalle de la etapa elegida */
+.exp-card {
+  height: 100%;
+  background: var(--bg-soft);
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: clamp(18px, 2.6vw, 28px);
+}
+
+.exp-tag {
+  display: inline-block;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 99px;
+  padding: 2px 12px;
+  margin-bottom: 12px;
+}
+
+.exp-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.2;
+}
+
+.exp-card-org {
+  color: var(--ink-2);
+  margin-block: 4px 16px;
+  font-size: 15px;
+}
+
+.exp-card ul {
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+
+/* Logro destacado de cada etapa */
+.exp-win {
+  margin-top: 16px;
+  background: #fff8d6;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 10px 14px 12px;
+}
+
+.exp-win .mono {
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.exp-win p {
+  font-size: 14.5px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.exp-detail {
+  min-height: 340px;
+}
+
+/* Formación e idiomas */
+.exp-extra {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+  align-items: stretch;
+}
+
+.exp .exp-edu,
+.exp .exp-langs {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.exp-edu ul,
+.exp-langs-card {
+  flex: 1;
+}
+
+.exp-edu h3,
+.exp-langs h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--ink-2);
+}
+
+.exp-edu ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.exp-study {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 16px 16px 16px;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.exp-study:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.exp-study-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--ink);
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
+
+.exp-study-period {
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.exp-study strong {
+  font-size: 15.5px;
+  line-height: 1.25;
+}
+
+.exp-study-org {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.exp-langs-card {
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.exp-langs-card ul {
+  list-style: none;
+  display: grid;
+  gap: 18px;
+}
+
+.exp-lang-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.exp-lang-head strong {
+  font-size: 15.5px;
+}
+
+.exp-lang-head span {
+  font-size: 13px;
+  text-align: right;
+}
+
+.exp-bar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.exp-bar i {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(17, 17, 17, 0.15);
+  border: 1.5px solid var(--ink);
+}
+
+.exp-bar i.exp-bar-on {
+  background: var(--ink);
+}
+
+/* Certificaciones: fila compacta */
+.exp .exp-certs {
+  padding: 0;
+  margin-top: 22px;
+}
+
+.exp-certs h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--ink-2);
+}
+
+.exp-certs ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.exp-cert {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 12px 16px;
+  height: 100%;
+}
+
+.exp-cert--link {
+  transition: background 0.15s, transform 0.15s;
+}
+
+.exp-cert--link:hover {
+  background: #fff8d6;
+  transform: translateY(-2px);
+}
+
+.exp-cert-link {
+  flex: none;
+  margin-left: auto;
+}
+
+.exp-cert-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--pink);
+  color: var(--ink);
+}
+
+.exp-cert strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.exp-cert span {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+@media (max-width: 860px) {
+  .exp-extra {
+    grid-template-columns: 1fr;
   }
 }
 
-/* ── Mobile: 667px – 320px ── */
-@media (max-width: 667px) {
-  .experience-section {
-    padding: 64px 20px;
+@media (max-width: 720px) {
+  .exp-grid {
+    grid-template-columns: 1fr;
   }
-  .timeline-line {
-    left: 14px;
+
+  .exp-detail {
+    min-height: 0;
   }
-  .timeline-item--left,
-  .timeline-item--right {
-    padding-left: 44px;
-    padding-right: 0;
-    justify-content: flex-start;
+}
+
+/* Tablet: encabezado centrado */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .exp .sec-title,
+  .exp .sec-sub {
+    text-align: center;
+    margin-inline: auto;
   }
-  .timeline-dot {
-    left: 14px;
+}
+
+/* Móvil: encabezados de bloque y tarjetas centrados */
+@media (max-width: 600px) {
+  .exp-card {
+    text-align: center;
   }
-  .timeline-card {
-    padding: 18px 16px;
+
+  .exp-card .exp-tag {
+    display: table;
+    margin-inline: auto;
   }
-  .timeline-card-title {
-    font-size: 14px;
+
+  .exp-card ul,
+  .exp-win {
+    text-align: left;
   }
-  .timeline-item {
-    margin-bottom: 32px;
+
+  .exp-edu h3,
+  .exp-langs h3,
+  .exp-certs h3 {
+    justify-content: center;
+  }
+
+  .exp-study {
+    align-items: center;
+    text-align: center;
+  }
+
+  .exp-cert {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .exp-cert-link {
+    margin-left: 0;
   }
 }

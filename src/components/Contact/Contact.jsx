@@ -1,102 +1,50 @@
-import { useEffect, useRef } from "react";
-import { Mail, Phone, Linkedin, Github, MapPin } from "lucide-react";
-import "./Contact.css";
+import { Mail, Linkedin, Github } from 'lucide-react'
+import { useLang } from '../../i18n/useLang'
+import { title } from '../../i18n/render'
+import ContactForm, { CONTACT_EMAIL } from './ContactForm'
+import './Contact.css'
 
 const contacts = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "Javier.mllanos96@gmail.com",
-    href: "mailto:Javier.mllanos96@gmail.com",
-  },
-  {
-    icon: Phone,
-    label: "Teléfono",
-    value: "+56 9 921 00385",
-    href: "tel:+56992100385",
-  },
-  {
-    icon: Linkedin,
-    label: "LinkedIn",
-    value: "linkedin.com/in/jamunozll/",
-    href: "https://www.linkedin.com/in/jamunozll/",
-  },
-  {
-    icon: Github,
-    label: "GitHub",
-    value: "github.com/Javiermll",
-    href: "https://github.com/Javiermll",
-  },
-];
+  { icon: Mail, label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/javiermunoz-fullstackdeveloper/' },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/Javiermll' },
+]
 
 export default function Contact() {
-  const titleRef = useRef(null);
-  const gridRef = useRef(null);
-  const footerRef = useRef(null);
-
-  useEffect(() => {
-    const els = [titleRef.current, gridRef.current, footerRef.current].filter(
-      Boolean,
-    );
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 },
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const { t } = useLang()
 
   return (
-    <footer id="contact" className="contact-section">
-      <div className="contact-inner">
-        <div className="contact-header fade-item" ref={titleRef}>
-          <p className="section-title" style={{ marginBottom: "12px" }}>
-            Contacto
-          </p>
-          <p className="contact-subtitle">
-            Estoy abierto a nuevas oportunidades. Si tienes un proyecto o rol en
-            mente, no dudes en escribirme.
-          </p>
+    <footer id="contact" className="contact">
+      <div className="wrap contact-inner">
+        <div className="contact-copy-col">
+          <p className="mono contact-kicker">{t.contact.kicker}</p>
+          <h2 className="sec-title contact-title">{title(t.contact.title)}</h2>
+          <p className="contact-lead">{t.contact.lead}</p>
+
+          <ul className="contact-list">
+            {contacts.map(({ icon: Icon, label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                >
+                  <Icon size={18} aria-hidden="true" />
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="contact-grid fade-item" ref={gridRef}>
-          {contacts.map(({ icon: Icon, label, value, href }) => (
-            <a
-              key={label}
-              href={href}
-              target={href.startsWith("http") ? "_blank" : undefined}
-              rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="contact-card"
-            >
-              <div className="contact-card-icon">
-                <Icon size={22} />
-              </div>
-              <div className="contact-card-text">
-                <span className="contact-card-label">{label}</span>
-                <span className="contact-card-value">{value}</span>
-              </div>
-            </a>
-          ))}
-        </div>
+        <ContactForm />
+      </div>
 
-        <div className="contact-footer fade-item" ref={footerRef}>
-          <div className="contact-location">
-            <MapPin size={14} />
-            <span>Concepción, Chile · Disponible para trabajo en LATAM</span>
-          </div>
-          <p className="contact-copy">
-            © {new Date().getFullYear()} Javier Muñoz · Construido con React +
-            Vite + CSS
-          </p>
-        </div>
+      <div className="wrap">
+        <p className="mono contact-copy">
+          © {new Date().getFullYear()} Javier Muñoz Llanos · {t.contact.copy}
+        </p>
       </div>
     </footer>
-  );
+  )
 }
